@@ -63,7 +63,7 @@ sudo ./install.cirrus.driver.sh -i
 sudo reboot
 ```
 
-Use `omarchy pkg add` / `omarchy update` rather than `pacman -Syu`. The install script downloads matching kernel source from kernel.org, so it needs network and `wget`. After a kernel update, DKMS rebuilds the module. If you skip reboot, unload `snd_hda_intel` first, then the codecs, then `modprobe snd_hda_intel` so the patched module actually attaches in place of the in-tree one.
+Use `omarchy pkg add` / `omarchy update` rather than `pacman -Syu`. The install script downloads matching kernel source from kernel.org, so it needs network and `wget`. After a kernel update, DKMS rebuilds the module, downloading that kernel's source again. Keep the cloned `snd_hda_macbookpro` directory where it is: the installer links `/usr/src/snd_hda_macbookpro-0.1` to it rather than copying it, so deleting or moving the clone breaks the rebuild. Reboot after installing so the patched module attaches in place of the in-tree one.
 
 Success looks like `dkms status` showing `snd_hda_macbookpro` installed for the running kernel, `modinfo -n snd_hda_codec_cs8409` pointing at `/lib/modules/$(uname -r)/updates/dkms/`, and `dmesg` containing `trying APPLE`. The ALSA device name becomes `CS8409/CS42L83 Analog`. This is an optional out-of-tree module (it taints the kernel); it is not installed by default.
 
