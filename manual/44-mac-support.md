@@ -50,7 +50,9 @@ The Apple T1 chip was introduced in late 2016 and used exclusively in the first-
 
 #### Known Issues
 
-- Touch Bar is non-functional
+- Touch Bar is dark out of the box. Omarchy's built-in Touch Bar stack (`tiny-dfr`) is T2-only. The T1 chip needs [t1bridge](https://github.com/standardagents/t1bridge) and the machine-specific Apple EFI folder `EFI/APPLE/EMBEDDEDOS` still on disk. If the Linux installer wiped that folder, restore it first with [t1-revive](https://github.com/niconistal/t1-revive), then install t1bridge from `linux.standardagents.ai`. On at least MacBookPro13,2 this lights Esc, Fn→F1–F12, brightness, volume, and media after a reboot so the user is in group `t1bridge`.
+- After suspend the laptop can wake with Touch Bar taps still working and the strip still dark. appletbdrm parks the panel (HID feature report 3 byte 1 = `0x01`) and t1bridge 0.1.12 does not write the awake value. systemd 262 only runs `/usr/lib/systemd/system-sleep` (not `/etc`). usbfs SET_REPORT is `EBUSY` because t1bridge-cfgselector owns `05ac:8600`. On MacBookPro13,2 (Omarchy 4.0.6, t1bridge 0.1.12), hidraw on iBridge interface 6 with `HIDIOCSFEATURE` `03 02` changed report 3 from `03010000` to `03020000` and relit the strip without a power cycle. Use s2idle, not S3/`deep`. Do not call ACPI `FRST` to "fix" sleep. Installable workaround: [Alkarth2010/t1-touchbar-s2idle](https://github.com/Alkarth2010/t1-touchbar-s2idle).
+- Omarchy's `omarchy-hw-external-monitors` treats the Touch Bar DRM connector (`card*-USB-*`) as an external display, so an undocked lid close can skip the lock. The workaround repo includes a helper that ignores that connector. A real HDMI/DP monitor still counts as docked.
 - Sound is not functioning
 
 #### Devices with T2 Chip
