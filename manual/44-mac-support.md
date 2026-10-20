@@ -50,7 +50,7 @@ The Apple T1 chip was introduced in late 2016 and used exclusively in the first-
 
 #### Known Issues
 
-- Touch Bar is dark out of the box. Omarchy's built-in Touch Bar stack (`tiny-dfr`) is T2-only. These machines have no physical Esc/F-row, so brightness, volume, and function keys only exist once the T1 bar is driven. On at least MacBookPro13,2 (2016 13-inch with Touch Bar) the bar, webcam, and (optionally) Touch ID work after restoring this Mac's Apple EFI data and installing [t1bridge](https://github.com/standardagents/t1bridge).
+- Touch Bar is dark out of the box. Omarchy's built-in Touch Bar support is T2-only. These machines have no physical Esc/F-row, so brightness, volume, and function keys only exist once the T1 bar is driven. On at least MacBookPro13,2 (2016 13-inch with Touch Bar) the bar, webcam, and (optionally) Touch ID work after restoring this Mac's Apple EFI data and installing [t1bridge](https://github.com/standardagents/t1bridge).
 
 If sysfs shows USB `05ac:1281` (Apple Mobile Device Recovery Mode) or `/boot/EFI/APPLE/EMBEDDEDOS` is missing, the installer wiped the T1 firmware data. Restore it with [t1-revive](https://github.com/niconistal/t1-revive) before t1bridge. That tool talks to Apple's restore protocol; it is irreversible without an `EFI/APPLE` backup. Do not pass `--no-confirm`. After a successful restore the T1 should enumerate as `05ac:8600`.
 
